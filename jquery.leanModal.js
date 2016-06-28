@@ -1,73 +1,56 @@
 (function($){
- 
     $.fn.extend({ 
-         
         leanModal: function(options) {
- 
             var defaults = {
                 top: 100,
                 overlay: 0.5,
                 closeButton: null
-            }
-            
+            };
+
             var overlay = $("<div id='lean_overlay'></div>");
-            
             $("body").append(overlay);
-                 
             options =  $.extend(defaults, options);
- 
+
             return this.each(function() {
-            
                 var o = options;
-               
-                $(this).click(function(e) {
-              
-              	var modal_id = $(this).attr("href");
 
-				$("#lean_overlay").click(function() { 
-                     close_modal(modal_id);                    
-                });
-                
-                $(o.closeButton).click(function() { 
-                     close_modal(modal_id);                    
-                });
-                         	
-              	var modal_height = $(modal_id).outerHeight();
-        	  	var modal_width = $(modal_id).outerWidth();
+                $(this).click($.proxy(function(e) {
+                    e.preventDefault();
+                    var modal_id = $(this).attr("href");
 
-        		$('#lean_overlay').css({ 'display' : 'block', opacity : 0 });
+				    $("#lean_overlay").click($.proxy(function() {
+                        $(this).closeModal();
+                    }, this));
 
-        		$('#lean_overlay').fadeTo(200,o.overlay);
+                    $(o.closeButton).click($.proxy(function() {
+                        $(this).closeModal();
+                    }, this));
 
-        		$(modal_id).css({ 
-        		
-        			'display' : 'block',
-        			'position' : 'fixed',
-        			'opacity' : 0,
-        			'z-index': 11000,
-        			'left' : 50 + '%',
-        			'margin-left' : -(modal_width/2) + "px",
-        			'top' : o.top + "px"
-        		
-        		});
+                    var modal_height = $(modal_id).outerHeight();
+                    var modal_width = $(modal_id).outerWidth();
 
-        		$(modal_id).fadeTo(200,1);
+                    $('#lean_overlay').css({'display' : 'block', opacity : 0});
+                    $('#lean_overlay').fadeTo(200, o.overlay);
 
-                e.preventDefault();
-                		
-              	});
-             
+                    $(modal_id).css({
+                        'display' : 'block',
+                        'position' : 'fixed',
+                        'opacity' : 0,
+                        'z-index': 11000,
+                        'left' : 50 + '%',
+                        'margin-left' : -(modal_width / 2) + "px",
+                        'top' : o.top + "px"
+                    });
+
+                    $(modal_id).fadeTo(200, 1);
+                }, this));
             });
+        },
 
-			function close_modal(modal_id){
-
-        		$("#lean_overlay").fadeOut(200);
-
-        		$(modal_id).css({ 'display' : 'none' });
-			
-			}
-    
-        }
+        closeModal: function() {
+            $("#lean_overlay").fadeOut(200);
+            $($(this).attr("href")).css({'display' : 'none'});
+		}
     });
-     
+
 })(jQuery);
