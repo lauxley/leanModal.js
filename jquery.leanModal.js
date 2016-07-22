@@ -43,13 +43,17 @@
                     });
 
                     $(modal_id).fadeTo(200, 1);
+
+                    $(this).trigger('modalopened', modal_id);
                 }, this));
             });
         },
 
         closeModal: function() {
             $("#lean_overlay").fadeOut(200);
-            $($(this).attr("href")).css({'display' : 'none'});
+            var modal_id = $(this).attr("href");
+            $(modal_id).css({'display' : 'none'});
+            $(this).trigger('modalclosed', modal_id);
 		}
     });
 
