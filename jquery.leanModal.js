@@ -42,6 +42,7 @@
                         'top' : o.top + "px"
                     });
 
+                    $(modal_id).css({'visibility': 'visible'});
                     $(modal_id).fadeTo(200, 1);
 
                     $(this).trigger('modalopened', modal_id);
@@ -52,7 +53,10 @@
         closeModal: function() {
             $("#lean_overlay").fadeOut(200);
             var modal_id = $(this).attr("href");
-            $(modal_id).css({'display' : 'none'});
+
+            $(modal_id).fadeTo(200, 0);
+            $(modal_id).css({'visibility' : 'hidden'});
+
             $(this).trigger('modalclosed', modal_id);
 		}
     });
